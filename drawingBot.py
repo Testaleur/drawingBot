@@ -50,6 +50,8 @@ if __name__ == '__main__':
                 disneyLogoPixels[n,m] = (255, 0, 0)
     display(disneyLogo, disneyLogoCopy)
 
+    print("test new pc")
+
 # x = np.arange(0,2*pi,0.1)
 # y = np.sin(x)
 # z = np.cos(x)
