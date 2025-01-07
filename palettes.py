@@ -1,3 +1,6 @@
+from PIL import Image
+import numpy as np
+
 paletteListe = [ "#000000", 
     "#4c4c4c",
     "#c1c1c1",
@@ -24,5 +27,15 @@ def turnIntoRGB(listHEX):
 
 paletteListeRGB = turnIntoRGB(paletteListe)
 
+paletteWidth = len(paletteListeRGB)*50
+paletteHeight = 100
+palette = Image.new(mode="RGB", size=(paletteWidth, paletteHeight))
+palettePixels = palette.load()
+for i in range(2,paletteWidth - 2):
+    for j in range(2,paletteHeight - 2):
+        colorInt = i//50
+        palettePixels[i,j] = paletteListeRGB[colorInt]
+palette_np = np.array(palette)
+
 def getPalette() :
-    return paletteListeRGB
+    return palette_np

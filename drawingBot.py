@@ -54,17 +54,8 @@ if __name__ == '__main__':
     # display(disneyLogo, disneyLogoCopy)
 
     # display our palette
-    paletteRGB = palettes.getPalette()
-    print(f'number of colors : {len(paletteRGB)}')
-    paletteWidth = len(paletteRGB)*50
-    paletteHeight = 100
-    palette = Image.new(mode="RGB", size=(paletteWidth, paletteHeight))
-    palettePixels = palette.load()
-    for i in range(2,paletteWidth - 2):
-        for j in range(2,paletteHeight - 2):
-            colorInt = i//50
-            palettePixels[i,j] = paletteRGB[colorInt]
-    palette_np = np.array(palette)
+    palette_np = palettes.getPalette()
+    
     plt.figure(figsize=(12, 5))
     plt.imshow(palette_np)
     plt.title("Palette")
