@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from math import pi
 from PIL import Image
+import palettes
 
 disneyImagePath = "disneyLogo.png"
 
@@ -42,15 +43,33 @@ if __name__ == '__main__':
     disneyLogoCopy = disneyLogo.copy()
     disneyLogoPixels = disneyLogoCopy.load()
     mainPixel = disneyLogoPixels[0,0]
-    print(mainPixel)
+    print(f'main pixel : {mainPixel}')
     for n in range(width):
         for m in range(heigth) :
             pixel = disneyLogoPixels[n,m]
-            if(pixel[0]+pixel[1]+pixel[2] >= 3*200) : #white or almost
+            # if(pixel[0]+pixel[1]+pixel[2] >= 3*200) : #white or almost
+            #     disneyLogoPixels[n,m] = (255, 0, 0)
+            if(pixel != mainPixel) : #not blue
                 disneyLogoPixels[n,m] = (255, 0, 0)
-    display(disneyLogo, disneyLogoCopy)
+    # display(disneyLogo, disneyLogoCopy)
 
-    print("test new pc")
+    # display our palette
+    paletteRGB = palettes.getPalette()
+    print(f'number of colors : {len(paletteRGB)}')
+    paletteWidth = len(paletteRGB)*50
+    paletteHeight = 100
+    palette = Image.new(mode="RGB", size=(paletteWidth, paletteHeight))
+    palettePixels = palette.load()
+    for i in range(2,paletteWidth - 2):
+        for j in range(2,paletteHeight - 2):
+            colorInt = i//50
+            palettePixels[i,j] = paletteRGB[colorInt]
+    palette_np = np.array(palette)
+    plt.figure(figsize=(12, 5))
+    plt.imshow(palette_np)
+    plt.title("Palette")
+    plt.axis("off")
+    plt.show()
 
 # x = np.arange(0,2*pi,0.1)
 # y = np.sin(x)
