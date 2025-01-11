@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import convertArrayWithPalette
 
-imagePath = "flowers.jpeg"
+imagePath = "images/" + "wattouat.png"
 
 def loadImage(path) :
     try: 
