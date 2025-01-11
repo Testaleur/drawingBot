@@ -1,5 +1,6 @@
 from PIL import Image
 import numpy as np
+import matplotlib.pyplot as plt
 
 paletteListe = [ "#000000", 
     "#4c4c4c",
@@ -39,3 +40,13 @@ palette_np = np.array(palette)
 
 def getPalette() :
     return palette_np
+
+def getPaletteRGB() :
+    return paletteListeRGB
+
+# display our palette
+# plt.figure(figsize=(12, 5))
+# plt.imshow(palette_np)
+# plt.title("Palette")
+# plt.axis("off")
+# plt.show()

@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from math import pi
 from PIL import Image
 import palettes
+import RGBtoLAB
 
 disneyImagePath = "disneyLogo.png"
 
@@ -53,21 +54,8 @@ if __name__ == '__main__':
                 disneyLogoPixels[n,m] = (255, 0, 0)
     # display(disneyLogo, disneyLogoCopy)
 
-    # display our palette
-    palette_np = palettes.getPalette()
-    
-    plt.figure(figsize=(12, 5))
-    plt.imshow(palette_np)
-    plt.title("Palette")
-    plt.axis("off")
-    plt.show()
-
-# x = np.arange(0,2*pi,0.1)
-# y = np.sin(x)
-# z = np.cos(x)
-# if __name__ == '__main__':
-#     plt.figure("Sinus & Cosinus")
-#     plt.plot(x,y,"-r", label="sin(x)")
-#     plt.plot(x,z,"-g", label="cos(x)")
-#     plt.legend()
-#     plt.show()
+    # get the RGB palette
+    paletteRGB = palettes.getPaletteRGB()
+    intPositionPalette = RGBtoLAB.equivalentColorFromPalette(mainPixel)
+    closestPixel = paletteRGB[intPositionPalette]
+    print(f'closest pixel : {closestPixel}')
