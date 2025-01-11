@@ -23,4 +23,3 @@ def equivalentColorFromPalette(RGBpixel): # return the closest color of the pale
 
 
 
-

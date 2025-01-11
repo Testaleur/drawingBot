@@ -1,8 +1,8 @@
 import numpy as np
 from PIL import Image
 import palettes
-import RGBtoLAB
-import distanceSecondMethod
+import distanceLABmethod
+import distanceEuclidianMethod
 
 # get the RGB palette
 paletteRGB = palettes.getPaletteRGB()
@@ -23,7 +23,7 @@ def newImagePaletteLAB(originalImage):
             if(pixelConversion): # we already calculated and saved it
                 imageCopyPixels[n,m] = pixelConversion
             else : # not calculated yet
-                intPositionPalette = RGBtoLAB.equivalentColorFromPalette(pixel) # LAB version
+                intPositionPalette = distanceLABmethod.equivalentColorFromPalette(pixel) # LAB version
                 closestPixel = paletteRGB[intPositionPalette]
                 imageCopyPixels[n,m] = closestPixel
                 # add to the data
@@ -42,7 +42,7 @@ def newImagePaletteClassic(originalImage):
             if(pixelConversion): # we already calculated and saved it
                 imageCopyPixels[n,m] = pixelConversion
             else : # not calculated yet
-                intPositionPalette = distanceSecondMethod.equivalentColorFromPalette(pixel) # classic distance version
+                intPositionPalette = distanceEuclidianMethod.equivalentColorFromPalette(pixel) # classic distance version
                 closestPixel = paletteRGB[intPositionPalette]
                 imageCopyPixels[n,m] = closestPixel
                 # add to the data

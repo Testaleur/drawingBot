@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import convertArrayWithPalette
 
-imagePath = "images/" + "wattouat.png"
-
 def loadImage(path) :
     try: 
         img  = Image.open(path)
@@ -38,10 +36,11 @@ def display(img1, img2 = None, img3 = None) :
         plt.axis("off")
     plt.show()
 
-if __name__ == '__main__':
-    #load and display
+
+def imagePixeled(imagePath):
     imageLoaded = loadImage(imagePath)
     imagePaletteLab = convertArrayWithPalette.newImagePaletteLAB(imageLoaded)
     imagePaletteClassic = convertArrayWithPalette.newImagePaletteClassic(imageLoaded)
+    return imagePaletteLab
 
-    display(imageLoaded, imagePaletteLab, imagePaletteClassic)
+    # display(imageLoaded, imagePaletteLab, imagePaletteClassic)

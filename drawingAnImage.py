@@ -1,9 +1,20 @@
 from pynput.mouse import Button, Controller
 import time
 import keyboard
+import drawingBot
+import numpy as np
+import matplotlib.pyplot as plt
+from PIL import Image
+import palettes
+
+imagePath = "images/" + "wattouat.png"
+imgToDraw = drawingBot.imagePixeled(imagePath)
+width, height = imgToDraw.size
+imgToDrawPixels = imgToDraw.load()
+
+paletteRGB = palettes.getPaletteRGB()
 
 mouse = Controller()
-
 colorsChoicePositions = [
 (462, 723),
 (481, 727),
@@ -38,12 +49,33 @@ def on_event(event):
     global running
     if (event.name == 'space') and (event.event_type == "down"):
         print("Starting drawing")
-        # posInit = mouse.position
-        # mouse.press(Button.left)
-        # for i in range(100):
-        #     mouse.position = nextPosition(mouse.position, posInit)
-        #     time.sleep(0.05)
-        # mouse.release(Button.left)
+
+        initialPos = mouse.position
+        currentPos = mouse.position
+        paletteInt = 0
+
+        for i in range(width):
+            for j in range(height):
+                pixel = imgToDrawPixels[i,j]
+                indexPixelColor = paletteRGB.index(pixel)
+                if(paletteInt != indexPixelColor): # we need to change color
+                    mouse.position = colorsChoicePositions[indexPixelColor]
+                    paletteInt = indexPixelColor
+                    mouse.press(Button.left) # selection of the color
+                    mouse.release(Button.left)
+                
+                if(mouse.position != currentPos): # we place the mouse back if needed
+                    mouse.position = currentPos
+                # then we place the pixel
+                mouse.press(Button.left)
+                mouse.release(Button.left)
+
+                if j < height - 1 : # we move the mouse to the bottom
+                    #mouse.position = (currentPos[0], currentPos[1] + 1)
+                    pass
+                else : # we go back to the top and move to the right
+                    # mouse.position = (currentPos[0] + 1, initialPos[1])
+                    pass
         print("Stopping drawing")
         running = False
 
