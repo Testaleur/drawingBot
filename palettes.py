@@ -59,8 +59,8 @@ def getPaletteRGB() :
     return paletteListeRGB
 
 #display our palette
-plt.figure(figsize=(12, 5))
-plt.imshow(palette_np)
-plt.title("Palette")
-plt.axis("off")
-plt.show()
+# plt.figure(figsize=(12, 5))
+# plt.imshow(palette_np)
+# plt.title("Palette")
+# plt.axis("off")
+# plt.show()

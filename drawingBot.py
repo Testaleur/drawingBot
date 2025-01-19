@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import convertArrayWithPalette
 
+imageSize = 40
+
 def loadImage(path) :
     try: 
         img  = Image.open(path)
@@ -39,6 +41,8 @@ def display(img1, img2 = None, img3 = None) :
 
 def imagePixeled(imagePath):
     imageLoaded = loadImage(imagePath)
+    if imageLoaded.width > 50 or imageLoaded.height > 50:
+        imageLoaded.thumbnail((imageSize, imageSize))
     imagePaletteLab = convertArrayWithPalette.newImagePaletteLAB(imageLoaded)
     imagePaletteClassic = convertArrayWithPalette.newImagePaletteClassic(imageLoaded)
     return imagePaletteLab

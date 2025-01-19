@@ -8,7 +8,7 @@ from PIL import Image
 import palettes
 
 imagePath = "images/" + "wattouat.png"
-imgToDraw = drawingBot.imagePixeled(imagePath)
+imgToDraw = drawingBot.imagePixeled(imagePath) #image ready to be drawn
 width, height = imgToDraw.size
 imgToDrawPixels = imgToDraw.load()
 
@@ -45,40 +45,66 @@ colorsChoicePositions = [
 ]
 
 running = True
+print("ready to listen")
 def on_event(event):
     global running
+
     if (event.name == 'space') and (event.event_type == "down"):
         print("Starting drawing")
 
         initialPos = mouse.position
-        currentPos = mouse.position
+        currentDrawingPos = mouse.position
         paletteInt = 0
 
-        for i in range(width):
-            for j in range(height):
-                pixel = imgToDrawPixels[i,j]
-                indexPixelColor = paletteRGB.index(pixel)
-                if(paletteInt != indexPixelColor): # we need to change color
-                    mouse.position = colorsChoicePositions[indexPixelColor]
-                    paletteInt = indexPixelColor
-                    mouse.press(Button.left) # selection of the color
-                    mouse.release(Button.left)
+        # pixel by pixel version : 
+        # for i in range(height):
+        #     for j in range(width):
+        #         pixel = imgToDrawPixels[i,j]
+        #         indexPixelColor = paletteRGB.index(pixel)
+        #         if(paletteInt != indexPixelColor): # we need to change color
+        #             mouse.position = colorsChoicePositions[indexPixelColor]
+        #             paletteInt = indexPixelColor
+        #             mouse.press(Button.left) # selection of the color
+        #             mouse.release(Button.left)
                 
-                if(mouse.position != currentPos): # we place the mouse back if needed
-                    mouse.position = currentPos
-                # then we place the pixel
+        #         currentDrawingPos = (initialPos[0] + 5*i, initialPos[1] + 5*j)
+
+        #         if(mouse.position != currentDrawingPos): # we place the mouse back if needed
+        #             mouse.position = currentDrawingPos
+        #         # then we place the pixel
+
+        #         mouse.press(Button.left)
+        #         mouse.release(Button.left)
+
+        # second method : color by color
+        imgToDrawPixelsNP = np.array(imgToDrawPixels)
+        for n in range(len(colorsChoicePositions)) :
+            currentColor = paletteRGB[n]
+            print(currentColor)
+            imgToDrawPixelsNP = np.array([[imgToDrawPixels[j, i] for i in range(height)] for j in range(width)])
+            filter = np.all(imgToDrawPixelsNP == currentColor, axis=-1)
+            matching_pixels = np.argwhere(filter)
+            matching_pixels = [tuple(coord) for coord in matching_pixels ]
+            matching_pixels = [(int(x), int(y)) for x, y in matching_pixels ] 
+
+            # select the color
+            mouse.position = colorsChoicePositions[n]
+            mouse.press(Button.left)
+            mouse.release(Button.left)
+            
+            # clicking at the pixels with this color only
+            for i in range(len(matching_pixels)):
+                currentDrawingPos = (initialPos[0] + 5*matching_pixels[i][0], initialPos[1] + 5*matching_pixels[i][1])
+
+                if(mouse.position != currentDrawingPos): # we place the mouse back if needed
+                    mouse.position = currentDrawingPos
+                # place the pixel
                 mouse.press(Button.left)
                 mouse.release(Button.left)
 
-                if j < height - 1 : # we move the mouse to the bottom
-                    #mouse.position = (currentPos[0], currentPos[1] + 1)
-                    pass
-                else : # we go back to the top and move to the right
-                    # mouse.position = (currentPos[0] + 1, initialPos[1])
-                    pass
         print("Stopping drawing")
         running = False
-
+  
     if event.name == 'esc':  # stop with esc
         print("Stopping listener...")
         mouse.release(Button.left)
