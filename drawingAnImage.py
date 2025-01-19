@@ -77,30 +77,45 @@ def on_event(event):
         #         mouse.release(Button.left)
 
         # second method : color by color
-        imgToDrawPixelsNP = np.array(imgToDrawPixels)
-        for n in range(len(colorsChoicePositions)) :
+        imgToDrawPixelsNP = np.array([[imgToDrawPixels[j, i] for i in range(height)] for j in range(width)])
+        for n in range(len(colorsChoicePositions)):
             currentColor = paletteRGB[n]
             print(currentColor)
-            imgToDrawPixelsNP = np.array([[imgToDrawPixels[j, i] for i in range(height)] for j in range(width)])
             filter = np.all(imgToDrawPixelsNP == currentColor, axis=-1)
             matching_pixels = np.argwhere(filter)
-            matching_pixels = [tuple(coord) for coord in matching_pixels ]
-            matching_pixels = [(int(x), int(y)) for x, y in matching_pixels ] 
+            matching_pixels = [tuple(coord) for coord in matching_pixels]
+            matching_pixels = [(int(x), int(y)) for x, y in matching_pixels]
 
-            # select the color
+            # Select the color
             mouse.position = colorsChoicePositions[n]
             mouse.press(Button.left)
             mouse.release(Button.left)
-            
-            # clicking at the pixels with this color only
-            for i in range(len(matching_pixels)):
-                currentDrawingPos = (initialPos[0] + 5*matching_pixels[i][0], initialPos[1] + 5*matching_pixels[i][1])
 
-                if(mouse.position != currentDrawingPos): # we place the mouse back if needed
-                    mouse.position = currentDrawingPos
-                # place the pixel
+            if matching_pixels:
+                start_pos = (initialPos[0] + 5 * matching_pixels[0][0], initialPos[1] + 5 * matching_pixels[0][1])
+                mouse.position = start_pos
+                # start holding
                 mouse.press(Button.left)
+
+                for i in range(1, len(matching_pixels)):
+                    current_pixel = matching_pixels[i]
+                    previous_pixel = matching_pixels[i - 1]
+
+                    currentDrawingPos = (initialPos[0] + 5 * current_pixel[0], initialPos[1] + 5 * current_pixel[1])
+                    previousDrawingPos = (initialPos[0] + 5 * previous_pixel[0], initialPos[1] + 5 * previous_pixel[1])
+
+                    # is the pixel next to it the same color?
+                    if (current_pixel[0] == previous_pixel[0] and abs(current_pixel[1] - previous_pixel[1]) == 1) or \
+                    (current_pixel[1] == previous_pixel[1] and abs(current_pixel[0] - previous_pixel[0]) == 1):
+                        mouse.position = currentDrawingPos # drawing the line
+                    else:
+                        #release the click
+                        mouse.release(Button.left)
+                        mouse.position = currentDrawingPos
+                        mouse.press(Button.left)
+                #end for this color
                 mouse.release(Button.left)
+
 
         print("Stopping drawing")
         running = False

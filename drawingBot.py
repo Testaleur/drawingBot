@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import convertArrayWithPalette
 
-imageSize = 40
+imageSize = 70
 
 def loadImage(path) :
     try: 
